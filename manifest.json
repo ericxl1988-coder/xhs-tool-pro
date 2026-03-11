@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "小红书工具箱 Pro",
+  "version": "1.4.0",
+  "description": "专业版Cookie提取与流量层级监控。",
+  "permissions": [
+    "cookies",
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.xiaohongshu.com/*",
+    "*://creator.xiaohongshu.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_icon": "xhs_tool_logo.png"
+  },
+  "icons": {
+    "128": "xhs_tool_logo.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://creator.xiaohongshu.com/*"
+      ],
+      "js": [
+        "scripts/inject.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://creator.xiaohongshu.com/*"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "world": "ISOLATED",
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "scripts/inject.js"
+      ],
+      "matches": [
+        "*://creator.xiaohongshu.com/*"
+      ]
+    }
+  ]
+}

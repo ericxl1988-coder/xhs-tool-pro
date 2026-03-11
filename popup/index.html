@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>XHS Tool Pro</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --primary: #ff2442;
+      --primary-hover: #e61e3a;
+      --bg-main: #ffffff;
+      --bg-sub: #f9fafb;
+      --border: #f3f4f6;
+      --text-main: #111827;
+      --text-sub: #4b5563;
+      --text-muted: #9ca3af;
+      --success: #10b981;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+
+    body {
+      width: 380px;
+      padding: 0;
+      margin: 0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-container {
+      padding: 24px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .brand-name {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text-main);
+    }
+
+    .status-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      background: var(--bg-sub);
+      color: var(--text-muted);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    /* Section Control */
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Info Cards */
+    .data-card {
+      background: var(--bg-sub);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-sub);
+      width: 80px;
+    }
+
+    .info-value-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .info-value {
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+
+    /* Copy Button Unit */
+    .copy-icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+
+    .copy-icon-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #fffafa;
+    }
+
+    .copy-icon-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Raw Data Toggle */
+    .raw-section {
+      margin-top: 16px;
+    }
+
+    .toggle-trigger {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .toggle-trigger:hover {
+      color: var(--primary-hover);
+    }
+
+    .raw-content {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      background: #111827;
+      color: #9ca3af;
+      font-size: 10px;
+      font-family: monospace;
+      border-radius: 12px;
+      word-break: break-all;
+      max-height: 100px;
+      overflow-y: auto;
+      line-height: 1.6;
+    }
+
+    /* Main Action */
+    .action-group {
+      margin-top: 24px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 15px -3px rgba(255, 36, 66, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 20px 25px -5px rgba(255, 36, 66, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Control Panel */
+    .control-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      background: var(--bg-sub);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    .control-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .control-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .control-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Switch Custom */
+    .switch-ui {
+      position: relative;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch-ui input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider-ui {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #e5e7eb;
+      transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 24px;
+    }
+
+    .slider-ui:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+      box-shadow: var(--shadow-sm);
+    }
+
+    input:checked + .slider-ui {
+      background-color: var(--primary);
+    }
+
+    input:checked + .slider-ui:before {
+      transform: translateX(20px);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      background: rgba(17, 24, 39, 0.95);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 500;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      backdrop-filter: blur(8px);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <div class="header">
+      <div class="brand">
+        <img id="app-logo" src="img/logo.png" alt="X" class="logo-img">
+        <span class="brand-name">XHS Tool Pro</span>
+      </div>
+      <div class="status-badge" id="version-tag">v1.4.0</div>
+    </div>
+
+    <!-- Cookie Extraction Section -->
+    <div class="section">
+      <div class="section-title">Identity & Authentication</div>
+      
+      <div class="data-card">
+        <!-- User ID -->
+        <div class="info-row">
+          <span class="info-label">User ID</span>
+          <div class="info-value-container">
+            <span class="info-value" id="val-userid">---</span>
+            <div class="copy-icon-btn" data-target="userid" title="Copy User ID">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+            </div>
+          </div>
+        </div>
+        <!-- Session -->
+        <div class="info-row">
+          <span class="info-label">Session</span>
+          <div class="info-value-container">
+            <span class="info-value" id="val-session">---</span>
+            <div class="copy-icon-btn" data-target="session" title="Copy Session">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+            </div>
+          </div>
+        </div>
+        <!-- A1 -->
+        <div class="info-row">
+          <span class="info-label">Device A1</span>
+          <div class="info-value-container">
+            <span class="info-value" id="val-a1">---</span>
+            <div class="copy-icon-btn" data-target="a1" title="Copy A1 ID">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="raw-section">
+        <span class="toggle-trigger" id="toggleRaw">
+          View Raw Payload
+          <svg style="width:12px; height:12px" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </span>
+        <div id="cookieRaw" class="raw-content">Fetching system data...</div>
+      </div>
+
+      <div class="action-group">
+        <button id="mainCopyBtn" class="btn-primary">Copy Full Cookie Profile</button>
+      </div>
+    </div>
+
+    <!-- Optimization Section -->
+    <div class="section">
+      <div class="section-title">Advanced Monitoring</div>
+      <div class="control-item">
+        <div class="control-info">
+          <span class="control-label">Traffic Traffic Guard</span>
+          <span class="control-desc">Real-time API level detection & overlay.</span>
+        </div>
+        <label class="switch-ui">
+          <input type="checkbox" id="detectSwitch" checked>
+          <span class="slider-ui"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast">Copied to clipboard</div>
+
+  <script src="index.js"></script>
+</body>
+
+</html>

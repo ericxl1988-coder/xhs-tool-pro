@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+*.log
+tmp/
+.gemini/
+publish_materials/src_v1.4.0/
+*.zip
+.vscode/
